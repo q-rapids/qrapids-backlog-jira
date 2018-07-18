@@ -1,9 +1,11 @@
 package com.bittium.qrapids.jira;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,14 +20,11 @@ import org.springframework.web.client.HttpStatusCodeException;
 @RestController
 public class RouteIssueController {
 
-    @ExceptionHandler(HttpServerErrorException.class)
-    public void errorFromJira(HttpServerErrorException ex) {
-        // HttpStatus responseStatus = ex.getStatusCode();
-    }
-
-    @ExceptionHandler(HttpClientErrorException.class)
-    public void clientError(HttpClientErrorException ex) {
-        // HttpStatus responseStatus = ex.getStatusCode();
+    /** this catches both client side and server side exceptions */
+    @ExceptionHandler(value = HttpStatusCodeException.class)
+    public void clientBadRequest(HttpServletResponse response, HttpStatusCodeException ex)
+            throws IOException {
+        response.sendError(ex.getRawStatusCode(), ex.getLocalizedMessage());
     }
 
     @RequestMapping(value = "/issue/create", method = RequestMethod.POST,
@@ -40,10 +39,12 @@ public class RouteIssueController {
 
         for (String key : keys) {
             if (!issue.containsKey(key)) {
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,
+                        String.format("Key '%s' not found from %s", key, keys));
             } else {
                 if (issue.get(key) == null | issue.get(key).isEmpty()) {
-                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,
+                            String.format("Key '%s' is null or empty", key));
                 }
             }
         }
@@ -51,7 +52,7 @@ public class RouteIssueController {
         int errorCode = 200;
         // access JIRA here
         if (errorCode != 200) {
-            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "JIRA messed up");
         }
 
         Map<String, String> response = new HashMap<>();
