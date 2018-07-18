@@ -1,4 +1,4 @@
-package com.bittium.qrapids.jira;
+package com.bittium.qrapids.issuetracker;
 
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 

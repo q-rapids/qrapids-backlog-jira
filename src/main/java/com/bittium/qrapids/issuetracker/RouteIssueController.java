@@ -1,4 +1,4 @@
-package com.bittium.qrapids.jira;
+package com.bittium.qrapids.issuetracker;
 
 import java.io.IOException;
 import java.util.ArrayList;

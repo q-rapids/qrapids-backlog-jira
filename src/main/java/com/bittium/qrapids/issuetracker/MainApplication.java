@@ -1,4 +1,4 @@
-package com.bittium.qrapids.jira;
+package com.bittium.qrapids.issuetracker;
 
 import java.util.Arrays;
 import org.springframework.boot.CommandLineRunner;

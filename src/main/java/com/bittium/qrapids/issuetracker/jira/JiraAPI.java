@@ -1,9 +1,10 @@
-package com.bittium.qrapids.jira;
+package com.bittium.qrapids.issuetracker.jira;
 
 import java.net.URI;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.JiraRestClientFactory;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
+import com.bittium.qrapids.issuetracker.IssueAPI;
 
 public class JiraAPI implements IssueAPI<JiraRestClient> {
     public JiraRestClient createClient() {
