@@ -13,5 +13,9 @@ import com.atlassian.jira.rest.client.api.JiraRestClient;
  * public interface IssueAPI<T extends IssueBase>
  */
 public interface IssueAPI<T extends JiraRestClient> {
-    public T createClient();
+
+    public void createClient(String serverURI, String username, String password);
+
+    public IssueCreatedResponse createIssue(String projectname, String type, String summary,
+            String description);
 }
