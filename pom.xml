@@ -6,10 +6,35 @@
 	<groupId>com.bittium.qrapids</groupId>
 	<artifactId>jira</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>${packaging.type}</packaging>
 
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
+
+	<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<packaging.type>jar</packaging.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<packaging.type>war</packaging.type>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
