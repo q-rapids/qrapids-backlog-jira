@@ -6,13 +6,13 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch)-MainApplication<jira>",
+            "name": "Debug-MainApplication",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopOnEntry": false,
             "mainClass": "com.bittium.qrapids.issuetracker.MainApplication",
-            "projectName": "jira",
+            "projectName": "issuetracker",
             "args": ""
         },
         {
