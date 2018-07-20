@@ -1,4 +1,4 @@
-package com.bittium.qrapids.issuetracker.jira;
+package com.bittium.qrapids.issuetracker.interfaces;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,10 +13,9 @@ import com.atlassian.jira.rest.client.api.domain.input.ComponentInput;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
-import com.bittium.qrapids.issuetracker.IssueAPI;
-import com.bittium.qrapids.issuetracker.IssueCreatedResponse;
+import com.bittium.qrapids.issuetracker.rest.CreateIssueResponse;
 
-public class JiraAPI implements IssueAPI<JiraRestClient> {
+public class Jira implements IssueTracker<JiraRestClient> {
 
     // TODO: RytiVei: Read these from config
     private static final String COMPONENT_NAME = "generated_by_qrapids";
@@ -30,10 +29,10 @@ public class JiraAPI implements IssueAPI<JiraRestClient> {
                 .createWithBasicHttpAuthentication(URI.create(serverURI), username, password);
     }
 
-    public IssueCreatedResponse createIssue(String projectname, String type, String summary,
+    public CreateIssueResponse createIssue(String projectname, String type, String summary,
             String description) {
 
-        IssueCreatedResponse response = new IssueCreatedResponse();
+        CreateIssueResponse response = new CreateIssueResponse();
 
         BasicProject project = null;
         for (BasicProject p : this.mClient.getProjectClient().getAllProjects().claim()) {
@@ -65,7 +64,7 @@ public class JiraAPI implements IssueAPI<JiraRestClient> {
         inputBuilder.setComponentsNames(components);
         IssueInput input = inputBuilder.build();
         BasicIssue basicIssue = this.mClient.getIssueClient().createIssue(input).claim();
-        response = new IssueCreatedResponse(basicIssue.getKey(), basicIssue.getSelf().toString());
+        response = new CreateIssueResponse(basicIssue.getKey(), basicIssue.getSelf().toString());
 
         return response;
     }

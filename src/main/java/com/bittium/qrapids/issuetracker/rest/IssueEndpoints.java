@@ -1,11 +1,11 @@
-package com.bittium.qrapids.issuetracker;
+package com.bittium.qrapids.issuetracker.rest;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
-import com.bittium.qrapids.issuetracker.jira.JiraAPI;
+import com.bittium.qrapids.issuetracker.interfaces.Jira;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 
 @RestController
-public class RouteIssueController {
+public class IssueEndpoints {
 
     /** this catches both client side and server side exceptions */
     @ExceptionHandler(value = HttpStatusCodeException.class)
@@ -48,12 +48,12 @@ public class RouteIssueController {
             }
         }
 
-        JiraAPI jira = new JiraAPI();
+        Jira jira = new Jira();
         // TODO: RytiVei: Read these from config. Now replace by hand and rebuild for testing.
         jira.createClient("replace_me_SERVER", "replace_me_USER", "replace_me_PASSWORD");
 
         // TODO: RytiVei: Read projectkey from config. Now replace by hand and rebuild for testing.
-        IssueCreatedResponse response =
+        CreateIssueResponse response =
                 jira.createIssue("replace_me_PROJECTKEY", issue.get("issue_type"),
                         issue.get("issue_summary"), issue.get("issue_description"));
 
