@@ -73,6 +73,8 @@ public class IssueEndpoints {
             }
         }
 
+        String summary = "QR: " + issue.get("issue_summary");
+
         // OPTIONAL FIELDS
         String description;
         if (issue.get("decision_rationale").isEmpty()) {
@@ -84,7 +86,7 @@ public class IssueEndpoints {
 
         jira.createClient(this.jiraServer, this.jiraUser, this.jiraPassword);
         CreateIssueResponse response = jira.createIssue(issue.get("project_id"),
-                issue.get("issue_type"), issue.get("issue_summary"), description);
+                issue.get("issue_type"), summary, description);
 
         return response;
     }
