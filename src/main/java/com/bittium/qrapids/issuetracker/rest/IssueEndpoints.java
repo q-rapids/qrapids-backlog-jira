@@ -54,11 +54,12 @@ public class IssueEndpoints {
             throws HttpStatusCodeException {
 
         List<String> keys = new ArrayList<>();
+
+        // MANDATORY FIELDS
         keys.add("issue_summary");
         keys.add("issue_description");
         keys.add("issue_type");
         keys.add("project_id");
-        keys.add("decision_rationale");
 
         for (String key : keys) {
             if (!issue.containsKey(key)) {
@@ -72,12 +73,18 @@ public class IssueEndpoints {
             }
         }
 
-        String descriptionAndRationale = issue.get("issue_description") + System.lineSeparator()
-                + "--" + System.lineSeparator() + "RATIONALE: " + issue.get("decision_rationale");
+        // OPTIONAL FIELDS
+        String description;
+        if (issue.get("decision_rationale").isEmpty()) {
+            description = issue.get("issue_description");
+        } else {
+            description = issue.get("issue_description") + System.lineSeparator() + "--"
+                    + System.lineSeparator() + "RATIONALE: " + issue.get("decision_rationale");
+        }
 
         jira.createClient(this.jiraServer, this.jiraUser, this.jiraPassword);
         CreateIssueResponse response = jira.createIssue(issue.get("project_id"),
-                issue.get("issue_type"), issue.get("issue_summary"), descriptionAndRationale);
+                issue.get("issue_type"), issue.get("issue_summary"), description);
 
         return response;
     }
