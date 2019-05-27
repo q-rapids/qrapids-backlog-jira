@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class CreateIssueResponse extends HashMap<String, String> {
 
+    public static final String ISSUE_ID = "issue_id";
     private static final String ISSUE_URL = "issue_url";
-    private static final String ISSUE_ID = "issue_id";
     private static final long serialVersionUID = -8014977994833926176L;
 
     public CreateIssueResponse() {

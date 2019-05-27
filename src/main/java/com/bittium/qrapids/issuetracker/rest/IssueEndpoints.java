@@ -88,6 +88,10 @@ public class IssueEndpoints {
         CreateIssueResponse response = jira.createIssue(issue.get("project_id"),
                 issue.get("issue_type"), summary, description);
 
+        // rewrite response: REST API URL --> WebUI URL
+        response = new CreateIssueResponse(response.get(CreateIssueResponse.ISSUE_ID),
+                this.jiraServer + "/browse/" + response.get(CreateIssueResponse.ISSUE_ID));
+
         return response;
     }
 
