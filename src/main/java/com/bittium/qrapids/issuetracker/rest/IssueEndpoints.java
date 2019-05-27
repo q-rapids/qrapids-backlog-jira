@@ -39,10 +39,6 @@ public class IssueEndpoints {
             System.out.println("jira.password is EMPTY");
             SpringApplication.exit(this.appContext);
         }
-        if (this.jiraProjectKey.isEmpty()) {
-            System.out.println("jira.project.key is EMPTY");
-            SpringApplication.exit(this.appContext);
-        }
     }
 
     /** this catches both client side and server side exceptions */
@@ -61,6 +57,8 @@ public class IssueEndpoints {
         keys.add("issue_summary");
         keys.add("issue_description");
         keys.add("issue_type");
+        keys.add("project_id");
+        keys.add("decision_rationale");
 
         for (String key : keys) {
             if (!issue.containsKey(key)) {
@@ -74,10 +72,12 @@ public class IssueEndpoints {
             }
         }
 
+        String descriptionAndRationale = issue.get("issue_description") + System.lineSeparator()
+                + "--" + System.lineSeparator() + "RATIONALE: " + issue.get("decision_rationale");
+
         jira.createClient(this.jiraServer, this.jiraUser, this.jiraPassword);
-        CreateIssueResponse response =
-                jira.createIssue(this.jiraProjectKey, issue.get("issue_type"),
-                        issue.get("issue_summary"), issue.get("issue_description"));
+        CreateIssueResponse response = jira.createIssue(issue.get("project_id"),
+                issue.get("issue_type"), issue.get("issue_summary"), descriptionAndRationale);
 
         return response;
     }
@@ -90,9 +90,6 @@ public class IssueEndpoints {
 
     @Value("${jira.password}")
     private String jiraPassword;
-
-    @Value("${jira.project.key}")
-    private String jiraProjectKey;
 
     @Autowired
     private ApplicationContext appContext;

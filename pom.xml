@@ -5,7 +5,7 @@
 
 	<groupId>com.bittium.qrapids</groupId>
 	<artifactId>issuetracker</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>${packaging.type}</packaging>
 
 	<name>demo</name>
